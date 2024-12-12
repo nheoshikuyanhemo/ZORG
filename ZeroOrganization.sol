@@ -1602,7 +1602,7 @@ contract ZORG is ERC20, Ownable {
     address public marketingWallet;
     address public treasurywallet;
 
-    uint256 public swapTokensAtAmount = 10000000000000 * (10**18);
+    uint256 public swapTokensAtAmount = 1000000000000000000 * (10**18);
 
     // buy fees
     uint256 public buyDividendRewardsFee = 13;
@@ -1712,7 +1712,7 @@ contract ZORG is ERC20, Ownable {
             _mint is an internal function in ERC20.sol that is only called here,
             and CANNOT be called ever again
         */
-        _mint(owner(), 100000000000000000 * (10**18));
+        _mint(owner(), 1000000000000000000 * (10**18));
     }
 
     receive() external payable {}
