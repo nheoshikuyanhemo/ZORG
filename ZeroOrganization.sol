@@ -643,7 +643,7 @@ contract DividendPayingToken is
     uint256 internal magnifiedDividendPerShare;
     uint256 internal lastAmount;
 
-    address public dividendToken = 0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56;
+    address public dividendToken = 0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA;
 
     // About dividendCorrection:
     // If the token balance of a `_user` is never changed, the dividend of `_user` can be computed with:
@@ -1583,13 +1583,13 @@ library SafeMathUint {
 /////////// Tokens /////////////
 ////////////////////////////////
 
-contract BabyDuckChain is ERC20, Ownable {
+contract ZORG is ERC20, Ownable {
     using SafeMath for uint256;
 
     IUniswapV2Router02 public uniswapV2Router;
     address public immutable uniswapV2Pair;
 
-    address public _dividendToken = 0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56;
+    address public _dividendToken = 0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA;
     address public deadAddress = 0x000000000000000000000000000000000000dEaD;
 
     bool private swapping;
@@ -1676,8 +1676,8 @@ contract BabyDuckChain is ERC20, Ownable {
         address indexed processor
     );
 
-    constructor() ERC20("BabyDuckChain", "BDC") {
-        dividendTracker = new BabyDuckChainDividendTracker();
+    constructor() ERC20("ZeroOrganization", "ZORG") {
+        dividendTracker = new ZorgDividendTracker();
 
         teamWallet = 0xc2851645221181df6Ab00D90C548a57C28c30e8d;
         treasurywallet = 0x70A938e8d5109c60D540BCa812E672d01Fa1Dda0;
@@ -1739,16 +1739,16 @@ contract BabyDuckChain is ERC20, Ownable {
     function updateDividendTracker(address newAddress) public onlyOwner {
         require(
             newAddress != address(dividendTracker),
-            "BDC: The dividend tracker already has that address"
+            "ZORG: The dividend tracker already has that address"
         );
 
-        BabyDuckChainDividendTracker newDividendTracker = BabyDuckChainDividendTracker(
+        ZorgDividendTracker newDividendTracker = ZorgDividendTracker(
             payable(newAddress)
         );
 
         require(
             newDividendTracker.owner() == address(this),
-            "BDC: The new dividend tracker must be owned by the BDC token contract"
+            "ZORG: The new dividend tracker must be owned by the ZORG token contract"
         );
 
         newDividendTracker.excludeFromDividends(address(newDividendTracker));
@@ -1807,7 +1807,7 @@ contract BabyDuckChain is ERC20, Ownable {
     function updateUniswapV2Router(address newAddress) public onlyOwner {
         require(
             newAddress != address(uniswapV2Router),
-            "BDC: The router already has that address"
+            "ZORG: The router already has that address"
         );
         emit UpdateUniswapV2Router(newAddress, address(uniswapV2Router));
         uniswapV2Router = IUniswapV2Router02(newAddress);
@@ -1835,7 +1835,7 @@ contract BabyDuckChain is ERC20, Ownable {
     function excludeFromFees(address account, bool excluded) public onlyOwner {
         require(
             _isExcludedFromFees[account] != excluded,
-            "BDC: Account is already the value of 'excluded'"
+            "ZORG: Account is already the value of 'excluded'"
         );
         _isExcludedFromFees[account] = excluded;
 
@@ -1859,7 +1859,7 @@ contract BabyDuckChain is ERC20, Ownable {
     {
         require(
             pair != uniswapV2Pair,
-            "BDC: The PancakeSwap pair cannot be removed from automatedMarketMakerPairs"
+            "ZORG: The PancakeSwap pair cannot be removed from automatedMarketMakerPairs"
         );
 
         _setAutomatedMarketMakerPair(pair, value);
@@ -1868,7 +1868,7 @@ contract BabyDuckChain is ERC20, Ownable {
     function _setAutomatedMarketMakerPair(address pair, bool value) private {
         require(
             automatedMarketMakerPairs[pair] != value,
-            "BDC: Automated market maker pair is already set to that value"
+            "ZORG: Automated market maker pair is already set to that value"
         );
         automatedMarketMakerPairs[pair] = value;
 
@@ -1882,11 +1882,11 @@ contract BabyDuckChain is ERC20, Ownable {
     function updateGasForProcessing(uint256 newValue) public onlyOwner {
         require(
             newValue >= 200000 && newValue <= 500000,
-            "BDC: gasForProcessing must be between 200,000 and 500,000"
+            "ZORG: gasForProcessing must be between 200,000 and 500,000"
         );
         require(
             newValue != gasForProcessing,
-            "BDC: Cannot update gasForProcessing to same value"
+            "ZORG: Cannot update gasForProcessing to same value"
         );
         emit GasForProcessingUpdated(newValue, gasForProcessing);
         gasForProcessing = newValue;
@@ -1911,8 +1911,8 @@ contract BabyDuckChain is ERC20, Ownable {
 
     // Add the updateDividendTokenAddress function
     function updateDividendTokenAddress(address newDividendToken) public onlyOwner {
-        require(newDividendToken != _dividendToken, "BDC: The dividend token already has that address");
-        require(newDividendToken != address(0), "BDC: The new dividend token is the zero address");
+        require(newDividendToken != _dividendToken, "ZORG: The dividend token already has that address");
+        require(newDividendToken != address(0), "ZORG: The new dividend token is the zero address");
 
         address oldDividendToken = _dividendToken;
         _dividendToken = newDividendToken;
@@ -2033,13 +2033,13 @@ contract BabyDuckChain is ERC20, Ownable {
             if (!swapping && canSwap) {
                 swapping = true;
 
-                uint256 bnbSwap = buytreasuryFee.add(buyTeamFee).add(
+                uint256 ethSwap = buytreasuryFee.add(buyTeamFee).add(
                     buyMarketingFee
                 );
-                uint256 swapTokens = contractTokenBalance.mul(bnbSwap).div(
+                uint256 swapTokens = contractTokenBalance.mul(ethSwap).div(
                     buyTotalFees
                 );
-                swapAndSendBnb(swapTokens, bnbSwap);
+                swapAndSendEth(swapTokens, ethSwap);
 
                 // swap and add liquidity
                 swapAndLiquify(
@@ -2048,7 +2048,7 @@ contract BabyDuckChain is ERC20, Ownable {
                 if (rewardEnable) {
                     if (_dividendToken == uniswapV2Router.WETH()) {
                         uint256 sellTokens = balanceOf(address(this));
-                        swapAndSendDividendsInBNB(sellTokens);
+                        swapAndSendDividendsInETH(sellTokens);
                     } else {
                         uint256 sellTokens = balanceOf(address(this));
                         swapAndSendDividends(sellTokens);
@@ -2114,8 +2114,8 @@ contract BabyDuckChain is ERC20, Ownable {
         }
     }
 
-    function swapAndSendBnb(uint256 tokenAmount, uint256 totalFee) private {
-        swapTokensForBNB(tokenAmount);
+    function swapAndSendEth(uint256 tokenAmount, uint256 totalFee) private {
+        swapTokensForETH(tokenAmount);
 
         transferToWallet(
             payable(teamWallet),
@@ -2131,7 +2131,7 @@ contract BabyDuckChain is ERC20, Ownable {
         );
     }
 
-    function swapTokensForBNB(uint256 tokenAmount) private {
+    function swapTokensForETH(uint256 tokenAmount) private {
         // generate the uniswap pair path of token -> weth
         address[] memory path = new address[](2);
         path[0] = address(this);
@@ -2184,12 +2184,12 @@ contract BabyDuckChain is ERC20, Ownable {
         }
     }
 
-    function swapAndSendDividendsInBNB(uint256 tokens) private {
-        uint256 currentBNBBalance = address(this).balance;
-        swapTokensForBNB(tokens);
-        uint256 newBNBBalance = address(this).balance;
+    function swapAndSendDividendsInETH(uint256 tokens) private {
+        uint256 currentETHBalance = address(this).balance;
+        swapTokensForETH(tokens);
+        uint256 newETHBalance = address(this).balance;
 
-        uint256 dividends = newBNBBalance.sub(currentBNBBalance);
+        uint256 dividends = newETHBalance.sub(currentETHBalance);
         (bool success, ) = address(dividendTracker).call{value: dividends}("");
 
         if (success) {
@@ -2216,7 +2216,7 @@ contract BabyDuckChain is ERC20, Ownable {
         uint256 initialBalance = address(this).balance;
 
         // swap tokens for ETH
-        swapTokensForBNB(half); // <- this breaks the ETH -> HATE swap when swap+liquify is triggered
+        swapTokensForETH(half); // <- this breaks the ETH -> HATE swap when swap+liquify is triggered
 
         // how much ETH did we just swap into?
         uint256 newBalance = address(this).balance.sub(initialBalance);
@@ -2243,7 +2243,7 @@ contract BabyDuckChain is ERC20, Ownable {
     }
 }
 
-contract BabyDuckChainDividendTracker is DividendPayingToken, Ownable {
+contract ZorgDividendTracker is DividendPayingToken, Ownable {
     using SafeMath for uint256;
     using SafeMathInt for int256;
     using IterableMapping for IterableMapping.Map;
@@ -2269,10 +2269,10 @@ contract BabyDuckChainDividendTracker is DividendPayingToken, Ownable {
     );
 
     constructor()
-        DividendPayingToken("BDC_Dividend_Tracker", "BDC_Dividend_Tracker")
+        DividendPayingToken("ZORG_Dividend_Tracker", "ZORG_Dividend_Tracker")
     {
         claimWait = 3600;
-        minimumTokenBalanceForDividends = 10000 * (10**9); //must hold 10000+ tokens
+        minimumTokenBalanceForDividends = 10000 * (10**18); //must hold 10000+ tokens
     }
 
     function _transfer(
@@ -2280,13 +2280,13 @@ contract BabyDuckChainDividendTracker is DividendPayingToken, Ownable {
         address,
         uint256
     ) internal pure override {
-        require(false, "BDC_Dividend_Tracker: No transfers allowed");
+        require(false, "ZORG_Dividend_Tracker: No transfers allowed");
     }
 
     function withdrawDividend() public pure override {
         require(
             false,
-            "BDC_Dividend_Tracker: withdrawDividend disabled. Use the 'claim' function on the main H4G contract."
+            "ZORG_Dividend_Tracker: withdrawDividend disabled. Use the 'claim' function on the main ZORG contract."
         );
     }
 
@@ -2315,11 +2315,11 @@ contract BabyDuckChainDividendTracker is DividendPayingToken, Ownable {
     function updateClaimWait(uint256 newClaimWait) external onlyOwner {
         require(
             newClaimWait >= 3600 && newClaimWait <= 86400,
-            "BDC_Dividend_Tracker: claimWait must be updated to between 1 and 24 hours"
+            "ZORG_Dividend_Tracker: claimWait must be updated to between 1 and 24 hours"
         );
         require(
             newClaimWait != claimWait,
-            "BDC_Dividend_Tracker: Cannot update claimWait to same value"
+            "ZORG_Dividend_Tracker: Cannot update claimWait to same value"
         );
         emit ClaimWaitUpdated(newClaimWait, claimWait);
         claimWait = newClaimWait;
