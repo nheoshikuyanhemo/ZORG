@@ -1596,7 +1596,7 @@ contract ZORG is ERC20, Ownable {
     bool public tradingIsEnabled = false;
     bool public rewardEnable = true;
 
-    BabyDuckChainDividendTracker public dividendTracker;
+    ZorgDividendTracker public dividendTracker;
 
     address public teamWallet;
     address public marketingWallet;
@@ -1676,7 +1676,7 @@ contract ZORG is ERC20, Ownable {
         address indexed processor
     );
 
-    constructor() ERC20("ZeroOrganization", "ZORG") {
+    constructor() ERC20("Zero Organization", "ZORG") {
         dividendTracker = new ZorgDividendTracker();
 
         teamWallet = 0xc2851645221181df6Ab00D90C548a57C28c30e8d;
